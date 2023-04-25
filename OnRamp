@@ -1,0 +1,25 @@
+const Coinbase = require('coinbase');
+const client = new Coinbase.Client({'apiKey': 'your_api_key', 'apiSecret': 'your_api_secret'});
+const accountID = 'your_account_id';
+
+const usdAmount = 100; // amount in USD to spend
+const currency = 'USDT'; // currency to purchase
+const paymentMethodID = 'your_payment_method_id'; // ID of the payment method to use
+
+// Get the account balance
+client.getAccount(accountID, function(err, account) {
+  if (err) throw err;
+  console.log('Your account balance is: ' + account.balance.amount + ' ' + account.balance.currency);
+
+  // Create a buy order
+  account.buy({
+    "amount": usdAmount,
+    "currency": currency,
+    "payment_method": paymentMethodID
+  }, function(err, buy) {
+    if (err) throw err;
+    console.log('Successfully bought ' + buy.amount.amount + ' ' + buy.amount.currency + ' of ' + currency + ' with ' + buy.payment_method.name);
+  });
+});
+
+// Note that you will need to replace the your_api_key, your_api_secret, your_account_id, and your_payment_method_id values with your own values, and make sure you have the coinbase Node.js package installed. This script also assumes that you have already authenticated with Coinbase using your API key and secret.
